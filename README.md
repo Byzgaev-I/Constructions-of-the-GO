@@ -292,6 +292,68 @@ func calculateDiscount(originalPrice, discountPercent float64) float64 {
 
 	return finalPrice
 }
+## Функция addNewItem - добавление нового товара
 
+```go
+// ДОПОЛНИТЕЛЬНАЯ ФУНКЦИЯ 1: Добавление нового товара
+func addNewItem(name, category string, price float64, quantity int) int64 {
+	// Генерируем уникальный ID для товара
+	currentID := nextItemID
+	nextItemID++
 
+	// Проверяем, не превысим ли лимит склада
+	if totalItems+quantity > MaxItems {
+		availableSpace := MaxItems - totalItems
+		fmt.Printf("Внимание: Можно добавить только %d единиц товара '%s' (ограничение склада)\n", 
+			availableSpace, name)
+		quantity = availableSpace
+	}
+
+	// Обновляем общее количество товаров
+	totalItems += quantity
+
+	// Выводим информацию о добавленном товаре
+	fmt.Printf("Товар добавлен на склад:\n")
+	fmt.Printf("   ID: %d\n", currentID)
+	fmt.Printf("   Название: %s\n", name)
+	fmt.Printf("   Категория: %s\n", category)
+	fmt.Printf("   Цена: %.2f руб.\n", price)
+	fmt.Printf("   Количество: %d\n", quantity)
+	fmt.Printf("   Дата добавления: %s\n", time.Now().Format("02-01-2006 15:04"))
+
+	return currentID  // ← ВОЗВРАЩАЕТ ID ТОВАРА
+}
 ```
+## Функция calculateDiscount - расчет скидки
+
+```go
+// ДОПОЛНИТЕЛЬНАЯ ФУНКЦИЯ 2: Расчет скидки на товар
+func calculateDiscount(originalPrice, discountPercent float64) float64 {
+	// Проверяем корректность входных данных
+	if originalPrice < 0 {
+		fmt.Println("Ошибка: Цена не может быть отрицательной")
+		return originalPrice
+	}
+
+	if discountPercent < 0 || discountPercent > 100 {
+		fmt.Println("Ошибка: Скидка должна быть от 0 до 100%")
+		return originalPrice
+	}
+
+	// Рассчитываем цену со скидкой
+	discountAmount := originalPrice * (discountPercent / 100)
+	finalPrice := originalPrice - discountAmount
+
+	// Дополнительная информация о скидке
+	if discountPercent >= 50 {
+		fmt.Printf("Супер скидка %.1f%%! ", discountPercent)
+	} else if discountPercent >= 20 {
+		fmt.Printf("Отличная скидка %.1f%%! ", discountPercent)
+	} else if discountPercent > 0 {
+		fmt.Printf("Скидка %.1f%% ", discountPercent)
+	}
+
+	return finalPrice  // ← ВОЗВРАЩАЕТ ЦЕНУ СО СКИДКОЙ
+}
+```
+
