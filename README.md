@@ -292,6 +292,8 @@ func calculateDiscount(originalPrice, discountPercent float64) float64 {
 
 	return finalPrice
 }
+```
+
 ## Функция addNewItem - добавление нового товара
 
 ```go
